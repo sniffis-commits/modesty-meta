@@ -4,8 +4,10 @@
 
 Modesty is a privacy-first NSFW content scanner. It rates websites, images,
 video, audio and subtitle text on a **1–10** scale, runs locally by default,
-and never uploads anything unless you explicitly ask it to. The free components
-are open source (MIT); a hosted service and a separate device app fund the work.
+and never uploads anything unless you explicitly ask it to. The code and the
+free database are open source (MIT). Contributors get credits and use the
+shared data for free; paid tiers are for people who would rather not
+contribute. A separate device app funds the work.
 
 This is the **meta repository**: the map and the big picture. Each component
 lives in its own public repository below.
@@ -37,9 +39,15 @@ missing the result is explicitly **not assessed** (`rating: null`).
 | [modesty-extensions](https://github.com/sniffis-commits/modesty-extensions) | Browser extensions (offline/self-hosted mode is FOSS). |
 | [modesty-models](https://github.com/sniffis-commits/modesty-models) | ONNX model weights (Apache-2.0 / CC), downloaded on first use. |
 
-Commercial products (a hosted API with paid tiers and a separate Android
-device app) are developed privately and are **not** part of these repositories.
-Only their interface contracts are described here — no implementation details.
+**Contribute and it is free.** Submitting a hash earns credits (1 hash = +10);
+reading/downloading a hash costs 1 credit. The paid tiers are for people who
+do not contribute and want unlimited reads instead. That is the funding model:
+the data and code stay FOSS, contributors get free access, and non-contributors
+pay for convenience.
+
+A separate Android device app and the hosted infrastructure are developed
+privately and are **not** part of these repositories. Only their interface
+contracts are described here — no implementation details.
 
 ## How the pieces fit together
 
@@ -80,8 +88,11 @@ See each repository's README for a full "what this is / how to" guide.
 
 - Code is MIT. Model weights and blocklist data carry their own licences —
   see the site's licence table: https://modesty.cia.org.il/?p=licenses
-- The hosted service deletes uploaded files after scanning but retains the
-  SHA-256, rating and scan metadata. Self-host if that does not suit you.
+- The webservice (`modesty-webservice`) accepts multipart uploads at `POST /scan`
+  and `POST /v1/sample`. It scans the bytes, deletes the temporary file, and
+  keeps only the SHA-256, rating and scan metadata. **The website's own API
+  takes only a URL or a hash — never a file.** Self-host the webservice if that
+  retention does not suit you.
 - No telemetry. No network calls in the local scanning path.
 
 Website: https://modesty.cia.org.il
